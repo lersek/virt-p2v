@@ -29,7 +29,8 @@ ifelse(REDHAT,1,
 
   dnl Run as external programs by the p2v binary.
   /usr/bin/ssh
-  /usr/bin/qemu-nbd
+  /usr/sbin/nbdkit
+  /usr/lib64/nbdkit/plugins/nbdkit-file-plugin.so
   which
 
   dnl Generally useful tools to use within xterm
@@ -134,7 +135,8 @@ ifelse(OPENMANDRIVA,1,
 
   dnl Run as external programs by the p2v binary.
   /usr/bin/ssh
-  /usr/bin/qemu-nbd
+  /usr/sbin/nbdkit
+  /usr/lib64/nbdkit/plugins/nbdkit-file-plugin.so
   which
 
   dnl Generally useful tools to use within xterm
