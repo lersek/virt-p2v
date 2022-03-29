@@ -213,10 +213,11 @@ start_nbdkit (const char *device, int *fds, size_t nr_fds)
 
     execlp ("nbdkit",
             "nbdkit",
-            "-r",             /* readonly (vital!) */
-            "-f",             /* don't fork */
-            "file",           /* file plugin */
-            file_str,         /* a device like file=/dev/sda */
+            "-r",                 /* readonly (vital!) */
+            "--exit-with-parent", /* don't fork, and exit when the parent thread
+                                   * does */
+            "file",               /* file plugin */
+            file_str,             /* a device like file=/dev/sda */
             NULL);
     perror ("nbdkit");
     _exit (EXIT_FAILURE);

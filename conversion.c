@@ -196,7 +196,6 @@ start_conversion (struct config *config,
 
   for (i = 0; config->disks[i] != NULL; ++i) {
     data_conns[i].h = NULL;
-    data_conns[i].nbd_pid = 0;
     data_conns[i].nbd_remote_port = -1;
   }
 
@@ -204,6 +203,7 @@ start_conversion (struct config *config,
   for (i = 0; config->disks[i] != NULL; ++i) {
     int nbd_local_port;
     CLEANUP_FREE char *device = NULL;
+    pid_t nbd_pid;
 
     if (config->disks[i][0] == '/') {
       device = strdup (config->disks[i]);
@@ -229,8 +229,8 @@ start_conversion (struct config *config,
     }
 
     /* Start NBD server listening on the given port number. */
-    data_conns[i].nbd_pid = start_nbd_server (&nbd_local_port, device);
-    if (data_conns[i].nbd_pid == 0) {
+    nbd_pid = start_nbd_server (&nbd_local_port, device);
+    if (nbd_pid == 0) {
       set_conversion_error ("NBD server error: %s", get_nbd_error ());
       goto out;
     }
@@ -445,12 +445,6 @@ cleanup_data_conns (struct data_conn *data_conns, size_t nr)
        */
       kill (mexp_get_pid (data_conns[i].h), SIGHUP);
       mexp_close (data_conns[i].h);
-    }
-
-    if (data_conns[i].nbd_pid > 0) {
-      /* Kill NBD process and clean up. */
-      kill (data_conns[i].nbd_pid, SIGTERM);
-      waitpid (data_conns[i].nbd_pid, NULL, 0);
     }
   }
 }

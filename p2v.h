@@ -85,7 +85,6 @@ extern void gui_conversion (struct config *);
 /* conversion.c */
 struct data_conn {          /* Data per NBD connection / physical disk. */
   mexp_h *h;                /* miniexpect handle to ssh */
-  pid_t nbd_pid;            /* NBD server PID */
   int nbd_remote_port;      /* remote NBD port on conversion server */
 };
 
